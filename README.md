@@ -235,11 +235,11 @@ Para entrar em uma pasta seguinte;
 ```
 Para voltar para a pasta anterior;
 ```
-  c..
+  cd ..
 ```
 Para voltar tudo de uma vez;
 ```
-  c~
+  cd ~
 ```
 Para ver os conteúdos da pasta;
 ```
