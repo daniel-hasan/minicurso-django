@@ -155,13 +155,13 @@ Em css crie um arquivo chamado estilos.css e adicione o CSS disponibilizado:
 
 ```
   h1 {
-   margin-top: 0;
+   	  margin-top: 0;
           color: gold;
           text-shadow: 2px 2px black;
   }
 
   body {
-  background-image: url(../imgs/fundo-da-ilha-pirata.jpg);
+  	 background-image: url(../imgs/fundo-da-ilha-pirata.jpg);
          background-repeat: no-repeat;
          background-position: left bottom;
          background-size: cover;
@@ -171,25 +171,25 @@ Em css crie um arquivo chamado estilos.css e adicione o CSS disponibilizado:
   }
 
   html {
-  text-align: center;
+  	 text-align: center;
          height: 100%;
   }
 
 
   table {
-       margin-left: auto;
+         margin-left: auto;
          margin-right: auto;
          border-collapse: collapse;
          background: white;
   }
 
   caption, p {
-  background-color: rgba(255, 255, 255, .7);
+         background-color: rgba(255, 255, 255, .7);
          font-size: 95%;
   }
 
   td, th {
-  padding: 4px 8px;
+  	 padding: 4px 8px;
   }
 
   th, #bot {
@@ -227,9 +227,22 @@ Importe a View e a url:
 ```
 <continua>
   
-# Navegando em arquivos no linux
+# Navegando em arquivos no terminal
 
-Digite cd <nome_pasta> para entrar em uma pasta seguinte;
-Digite cd .. para voltar para a pasta anterior;
-Digite ls para ver os conteúdos da pasta;
+Para entrar em uma pasta seguinte;
+```
+  cd <nome_pasta>
+```
+Para voltar para a pasta anterior;
+```
+  c..
+```
+Para voltar tudo de uma vez;
+```
+  c~
+```
+Para ver os conteúdos da pasta;
+```
+  ls
+```
 
