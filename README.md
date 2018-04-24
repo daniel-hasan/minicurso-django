@@ -129,12 +129,11 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
 
 ```
 <!DOCTYPE html>
-{% load static %}
     <head>
-        <link rel="icon" href="{% static 'imgs/calice.ico'%}">
+        <link rel="icon" href="">
         <title>Gerenciador de Tesouros</title>
         <meta charset="UTF-8">
-    	<link rel="stylesheet" type="text/css" href="{% static 'css/estilos.css'%}">
+    	<link rel="stylesheet" type="text/css" href="">
 	<script>let valorTotal; let None; let soma=0;</script>
     </head>
     <body>
@@ -144,15 +143,15 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
 
 	  <div class="modal-content">
 	    <span class="close">&times;</span>
-		<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-		    {{ form.as_p }}
+		<form action="" method="post" enctype="multipart/form-data">
+		    
 		    <input type="submit" value="Adicionar" />
 		</form>
 	  </div>
 
 	</div>
 
-	<button id="myBtn">Add tesouro</button><p>
+	<button id="myBtn">Adicionar</button><p>
 
         <table>
             <caption>Estes são os tesouros acumulados do
@@ -164,44 +163,50 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
                     <th>Valor unitário</th>
                     <th>Quantidade</th>
                     <th>Valor total</th> 
+		    <th colspan="2">Editar</th>
                 </tr>
             </thead>
 	    <tbody>
 		
-	    {% for objTesouro in lista_tesouro %}
+	    
 		<tr>
-		     <td><img src="{{ MEDIA_URL }}{{ objTesouro.img_tesouro }}"/></td>
-		     <td>{{ objTesouro.nome }}</td>
-		     <td>{{ objTesouro.valor }}</td>
-		     <td>{{ objTesouro.quantidade }}</td>
-		     <td id="id{{ objTesouro.id }}" class="valorTotal">
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td id="" class="valorTotal">
 			<script> 
-				if({{ objTesouro.valor }}){
-					valorTotal = {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+				if(){
+					valorTotal =  * ;
 				} else {
 					valorTotal = "-";
 				}
-				document.querySelector("#id"+"{{ objTesouro.id }}").innerHTML = valorTotal;
+				document.querySelector("#id"+"").innerHTML = valorTotal;
 				console.log(valorTotal);
 			</script>
 		     </td>
+		     <td><form action="" method="post">{% csrf_token %}
+	         		<button id="delete">Remover</button>
+	         	</form></td>
+		     <td><button data-nome="{{ objTesouro.nome }}" class="update">Modificar</button></td>
 		</tr>
-	    {% endfor %}
+	    
 	    </tbody>
             <tfoot>
                 <tr>
                     <td colspan="4" id="bot">Total</td>
                     <td id="bot" class="soma">
 			<script> 
-				{% for objTesouro in lista_tesouro %}
-					if({{ objTesouro.valor }}){
-						soma += {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+				
+				if(){
+						soma +=  * ;
 					}
-				{% endfor %}
+				
 				document.querySelector(".soma").innerHTML = soma;
 				console.log(soma);
 			</script>
 		    </td>
+		    <td colspan="2" id="bot"></td>
                 </tr>
             </tfoot>
         </table>
@@ -211,25 +216,113 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
         aventuras!
         </p>
 	
-	<script>
-		var modal = document.getElementById('myModal');
-		var btn = document.getElementById("myBtn");
+	<script>		
+	
+	function initModal(idModal, idBotao){
+		var modal = document.getElementById(idModal);
+		var btn = document.getElementById(idBotao);
 		var span = document.getElementsByClassName("close")[0];
-		btn.onclick = function() {
-		    modal.style.display = "block";
-		}
-		span.onclick = function() {
+		
+		span.addEventListener("click", function() {
 		    modal.style.display = "none";
+		});
+		if(idBotao != ""){
+			btn.onclick = function() {
+			    modal.style.display = "block";
+			}
 		}
-		window.onclick = function(event) {
+		
+		window.addEventListener("click", function(event) {
 		    if (event.target == modal) {
 			modal.style.display = "none";
 		    }
-		}
+		});
+	}
+	
+	
+	initModal("myModal", "myBtn");
+	
+	{% if object.id %}
+		document.getElementById("myModal").style.display = "block";
+		
+	{% endif %}
+	var arrBtnUpdate = document.querySelectorAll(".update");
+	for(var i =0 ; i<arrBtnUpdate.length ; i++){	
+		arrBtnUpdate[i].addEventListener("click", function(e) {
+			    var btnTesouro = e.currentTarget;
+			    window.location.href = "{% url 'TesouroUpdate' ''%}"+btnTesouro.dataset.nome;
+			});
+	}
+	
 	</script>
 	
     </body>
 </html>
+```
+
+Adicione a tag responsável por carregar os arquivos estáticos no template:
+
+```
+{% load static %}
+```
+
+Para adicionar o diretório de arquivos estáticos o django dispoe da tag {% static 'caminho_static'%} 
+
+Adicione o ícone da página:
+
+```
+{% static 'imgs/calice.ico'%}
+```
+Adicione o css da página:
+
+```
+{% static 'css/estilos.css'%}
+```
+Para criar um formulário usando generic view o django fornece a tag form.as_p que gera o formulário de acordo com os fields definidos na view. Adicione a tag para gerar a view de inserção/atualização:
+
+```
+{{ form.as_p }}
+```
+Cross Site Request Forgery protection é usada para proteção. Adicione ao form:
+
+```
+{% csrf_token %}
+```
+Para criar a tabela dinamicamente é necessário percorrer os dados no banco. Para isso crie um for: 
+```
+{% for objTesouro in lista_tesouro %}
+{% endfor %}
+```
+
+```
+		     <td><img src="{{ MEDIA_URL }}{{ objTesouro.img_tesouro }}"/></td>
+		     <td>{{ objTesouro.nome }}</td>
+		     <td>{{ objTesouro.valor }}</td>
+		     <td>{{ objTesouro.quantidade }}</td>
+		     <td id="id{{ objTesouro.id }}" class="valorTotal">
+```
+```
+	<td id="id{{ objTesouro.id }}" class="valorTotal">
+			<script> 
+				if({{ objTesouro.valor }}){
+					valorTotal = {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+				} else {
+					valorTotal = "-";
+				}
+				document.querySelector("#id"+"{{ objTesouro.id }}").innerHTML = valorTotal;
+				console.log(valorTotal);
+			</script>
+```
+URL: 
+```
+{% url 'TesouroDelete' objTesouro.nome %}
+```
+```
+				{% for objTesouro in lista_tesouro %}
+					if({{ objTesouro.valor }}){
+						soma += {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+					}
+				{% endfor %}
 ```
 
 ## Adicionando Arquivos Estáticos
@@ -356,16 +449,37 @@ No arquivo views.py, adicione:
 
 ```
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.forms.utils import ErrorList
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from piratapp.models import Tesouro
-from django.urls.base import reverse
+from django.urls.base import reverse, reverse_lazy
+
+class FormValidation(object):
+
+    def form_valid(self, view, form):
+        lsta_tesouro = Tesouro.objects.filter(nome=form.instance.nome)
+        if(form.instance.pk != None):
+            lsta_tesouro = lsta_tesouro.exclude(pk=form.instance.pk)
+        if len(lsta_tesouro) > 0:
+            errors = form._errors.setdefault("nome", ErrorList())
+            errors.append(u"nomes iguais não são permitidos")
+            return False
+        
+        return True
 
 class TesouroInsert(CreateView):
     
     model = Tesouro
     template_name = "index.html"
+    form_validator = FormValidation()
 
     fields=["img_tesouro", "nome", "valor", "quantidade"]
+	
+    def form_valid(self, form):
+        bol_valid = TesouroInsert.form_validator.form_valid(self, form)
+        return super(CreateView, self).form_valid(form) if bol_valid else super(CreateView, self).form_invalid(form)
+
 
     def get_context_data(self, **kwargs):
         context = super(TesouroInsert, self).get_context_data(**kwargs)
@@ -383,6 +497,32 @@ class TesouroInsert(CreateView):
             "valor" : "Valor unitário",
             "quantidade" : "Quantidade"
         } 
+
+class TesouroUpdate(UpdateView):
+    model = Tesouro
+    template_name = "index.html"
+    form_validator = FormValidation()
+
+    fields=["img_tesouro", "nome", "valor", "quantidade"]
+	
+    def form_valid(self, form):        
+        bol_valid = TesouroUpdate.form_validator.form_valid(self, form)
+        return super(UpdateView, self).form_valid(form) if bol_valid else super(UpdateView, self).form_invalid(form)
+    
+    def get_object(self):
+        return Tesouro.objects.get(nome=self.kwargs["nome"])
+    
+    def get_success_url(self):
+        return reverse('GerenciadorTesouros')
+    
+class TesouroDelete(DeleteView):
+    model = Tesouro
+
+    def get_object(self):
+        return Tesouro.objects.get(nome=self.kwargs["nome"])
+     
+    def get_success_url(self):
+	return reverse_lazy('GerenciadorTesouros')
 ```
 
 ## Vinculando o Template a uma VIew - URLs
@@ -405,7 +545,10 @@ Crie uma url para a view de visualização/inserção:
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^GerenciadorTesouros$', views.TesouroInsert.as_view(), name='GerenciadorTesouros'),
+    url(r'^GerenciadorTesouros/Update/(?P<nome>.*)$', views.TesouroUpdate.as_view(), name='TesouroUpdate'),
+    url(r'^GerenciadorTesouros/(?P<nome>.*)$', views.TesouroDelete.as_view(), name='TesouroDelete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 ```  
 
 # Navegando em arquivos no terminal
