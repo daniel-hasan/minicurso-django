@@ -128,7 +128,108 @@ No arquivo settings.py, em  TEMPLATES, modifique 'DIRS':
 Com o diretório criado, crie um arquivo na pasta templates chamado index.html e adicione o html disponibilizado.
 
 ```
-<O código será disponibilizado aqui>
+<!DOCTYPE html>
+{% load static %}
+    <head>
+        <link rel="icon" href="{% static 'imgs/calice.ico'%}">
+        <title>Gerenciador de Tesouros</title>
+        <meta charset="UTF-8">
+    	<link rel="stylesheet" type="text/css" href="{% static 'css/estilos.css'%}">
+	<script>let valorTotal; let None; let soma=0;</script>
+    </head>
+    <body>
+        <h1>Gerenciador de Tesouros</h1>
+
+	<div id="myModal" class="modal">
+
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+		<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		    {{ form.as_p }}
+		    <input type="submit" value="Adicionar" />
+		</form>
+	  </div>
+
+	</div>
+
+	<button id="myBtn">Add tesouro</button><p>
+
+        <table>
+            <caption>Estes são os tesouros acumulados do
+            Barba-Ruiva em suas aventuras</caption>
+            <thead>
+                <tr>
+                    <th>Tesouro</th>
+                    <th>Nome</th>
+                    <th>Valor unitário</th>
+                    <th>Quantidade</th>
+                    <th>Valor total</th> 
+                </tr>
+            </thead>
+	    <tbody>
+		
+	    {% for objTesouro in lista_tesouro %}
+		<tr>
+		     <td><img src="{{ MEDIA_URL }}{{ objTesouro.img_tesouro }}"/></td>
+		     <td>{{ objTesouro.nome }}</td>
+		     <td>{{ objTesouro.valor }}</td>
+		     <td>{{ objTesouro.quantidade }}</td>
+		     <td id="id{{ objTesouro.id }}" class="valorTotal">
+			<script> 
+				if({{ objTesouro.valor }}){
+					valorTotal = {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+				} else {
+					valorTotal = "-";
+				}
+				document.querySelector("#id"+"{{ objTesouro.id }}").innerHTML = valorTotal;
+				console.log(valorTotal);
+			</script>
+		     </td>
+		</tr>
+	    {% endfor %}
+	    </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" id="bot">Total</td>
+                    <td id="bot" class="soma">
+			<script> 
+				{% for objTesouro in lista_tesouro %}
+					if({{ objTesouro.valor }}){
+						soma += {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
+					}
+				{% endfor %}
+				document.querySelector(".soma").innerHTML = soma;
+				console.log(soma);
+			</script>
+		    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <p>Yarr Harr, marujo! Aqui é o temido
+        Barba-Ruiva e você deve me ajudar a
+        contabilizar os espólios das minhas
+        aventuras!
+        </p>
+	
+	<script>
+		var modal = document.getElementById('myModal');
+		var btn = document.getElementById("myBtn");
+		var span = document.getElementsByClassName("close")[0];
+		btn.onclick = function() {
+		    modal.style.display = "block";
+		}
+		span.onclick = function() {
+		    modal.style.display = "none";
+		}
+		window.onclick = function(event) {
+		    if (event.target == modal) {
+			modal.style.display = "none";
+		    }
+		}
+	</script>
+	
+    </body>
+</html>
 ```
 
 ## Adicionando Arquivos Estáticos
@@ -207,26 +308,106 @@ Em css crie um arquivo chamado estilos.css e adicione o CSS disponibilizado:
          background-color: orange;
          border-color: black;
   }
+  
+  /* Modal retirado https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal */
+
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
 ```
 
 ## Criando a View
 
-A view é responsável por solicitar informações do models e passá-las para um template por isso se torna necessário a criação de uma classe view para a visualização
+A view é responsável por solicitar informações do models e passá-las para um template por isso se torna necessário a criação de uma classe view para a visualização.
 
-<continua>
-  
+No arquivo views.py, adicione:
+
+```
+from django.shortcuts import render
+from django.views.generic.edit import CreateView
+from piratapp.models import Tesouro
+from django.urls.base import reverse
+
+class TesouroInsert(CreateView):
+    
+    model = Tesouro
+    template_name = "index.html"
+
+    fields=["img_tesouro", "nome", "valor", "quantidade"]
+
+    def get_context_data(self, **kwargs):
+        context = super(TesouroInsert, self).get_context_data(**kwargs)
+        context["lista_tesouro"] = Tesouro.objects.all()
+
+        return context  
+
+    def get_success_url(self):
+        return reverse('GerenciadorTesouros')
+    
+    class Meta:
+        labels = {
+            "img_tesouro" : "Tesouro",
+            "nome" : "Nome",
+            "valor" : "Valor unitário",
+            "quantidade" : "Quantidade"
+        } 
+```
+
 ## Vinculando o Template a uma VIew - URLs
 
 Para vincular uma View a um Template é necessário criar uma url. Para isso, abra o arquivo urls.py que se encontra em (Django-com-Piratas/piratas/piratas):
 
-Importe a View e a url:
+Importe a View, a url e o static:
 
 ```
-  from django.conf.urls import url
-  from app import views
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import url
+from piratapp import views
+from django.conf import settings
+from django.conf.urls.static import static
 ```
-<continua>
-  
+Crie uma url para a view de visualização/inserção:
+
+```
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    url(r'^GerenciadorTesouros$', views.TesouroInsert.as_view(), name='GerenciadorTesouros'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```  
+
 # Navegando em arquivos no terminal
 
 Para entrar em uma pasta seguinte;
