@@ -134,7 +134,6 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
         <title>Gerenciador de Tesouros</title>
         <meta charset="UTF-8">
     	<link rel="stylesheet" type="text/css" href="">
-	<script>let valorTotal; let None; let soma=0;</script>
     </head>
     <body>
         <h1>Gerenciador de Tesouros</h1>
@@ -174,16 +173,8 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
 		     <td></td>
 		     <td></td>
 		     <td></td>
-		     <td id="" class="valorTotal">
-			<script> 
-				if(){
-					valorTotal =  * ;
-				} else {
-					valorTotal = "-";
-				}
-				document.querySelector("#id"+"").innerHTML = valorTotal;
-				console.log(valorTotal);
-			</script>
+		     <td class="valorTotal">
+			
 		     </td>
 		     <td><form action="" method="post">{% csrf_token %}
 	         		<button id="delete">Remover</button>
@@ -197,13 +188,7 @@ Com o diretório criado, crie um arquivo na pasta templates chamado index.html e
                     <td colspan="4" id="bot">Total</td>
                     <td id="bot" class="soma">
 			<script> 
-				
-				if(){
-						soma +=  * ;
-					}
-				
-				document.querySelector(".soma").innerHTML = soma;
-				console.log(soma);
+			
 			</script>
 		    </td>
 		    <td colspan="2" id="bot"></td>
@@ -302,27 +287,14 @@ Para criar a tabela dinamicamente é necessário percorrer os dados no banco. Pa
 		     <td id="id{{ objTesouro.id }}" class="valorTotal">
 ```
 ```
-	<td id="id{{ objTesouro.id }}" class="valorTotal">
-			<script> 
-				if({{ objTesouro.valor }}){
-					valorTotal = {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
-				} else {
-					valorTotal = "-";
-				}
-				document.querySelector("#id"+"{{ objTesouro.id }}").innerHTML = valorTotal;
-				console.log(valorTotal);
-			</script>
+	
 ```
 URL: 
 ```
 {% url 'TesouroDelete' objTesouro.nome %}
 ```
-```
-				{% for objTesouro in lista_tesouro %}
-					if({{ objTesouro.valor }}){
-						soma += {{ objTesouro.valor }} * {{ objTesouro.quantidade }};
-					}
-				{% endfor %}
+```	{{ objTesouro.total }}
+	{{preco_total}}			
 ```
 
 ## Adicionando Arquivos Estáticos
@@ -483,7 +455,13 @@ class TesouroInsert(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TesouroInsert, self).get_context_data(**kwargs)
-        context["lista_tesouro"] = Tesouro.objects.all()
+        lstTesouros = Tesouro.objects.annotate(total=ExpressionWrapper(F('valor') * F('quantidade'),output_field=DecimalField(max_digits=10,decimal_places=2, blank=True)))
+        context["lista_tesouro"] = lstTesouros
+        soma = 0
+        for tesouro in lstTesouros:
+            soma += tesouro.total
+        context["preco_total"] = soma
+        return context  
 
         return context  
 
