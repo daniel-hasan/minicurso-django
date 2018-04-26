@@ -100,7 +100,6 @@ No arquivo views.py, foram adicionada as seguintes importações que serão nece
 ```
 from django.shortcuts import render
 from django.forms.utils import ErrorList
-from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from piratapp.models import Tesouro
 from django.urls.base import reverse, reverse_lazy
