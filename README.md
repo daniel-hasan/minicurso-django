@@ -70,7 +70,7 @@ O migrate foi rodado para salvar as modificações efetuadas até o momento no m
 Para adicionar o Banco de Dados a Interface do Admin que será introduzida na prática foi necessário editar o arquivo admin.py que se encontra no diretório piratasapp e registrando o banco:
 
 ```
-  from piratapp.models import Tesouro
+  from piratasapp.models import Tesouro
 
   admin.site.register(Tesouro)
 ```
@@ -101,7 +101,7 @@ No arquivo views.py, foram adicionada as seguintes importações que serão nece
 from django.shortcuts import render
 from django.forms.utils import ErrorList
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from piratapp.models import Tesouro
+from piratasapp.models import Tesouro
 from django.urls.base import reverse, reverse_lazy
 '''
 class FormValidation(object):
@@ -145,7 +145,7 @@ Foram necessária as seguintes importações para a url
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from piratapp import views
+from piratasapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -155,4 +155,4 @@ urlpatterns = [
 
 ```  
 
-# A pática está no slide e após o fim do minicurso será disponibilizada aqui
+## A pática está no slide e após o fim do minicurso será disponibilizada aqui
