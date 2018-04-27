@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+    <head>
+        <link rel="icon" href="">
+        <title>Gerenciador de Tesouros</title>
+        <meta charset="UTF-8">
+    	<link rel="stylesheet" type="text/css" href="">
+    </head>
+    <body>
+        <h1>Gerenciador de Tesouros</h1>
+
+	<div id="myModal" class="modal">
+
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+		<form action="" method="post" enctype="multipart/form-data">
+		    
+		    <input type="submit" value="Adicionar" />
+		</form>
+	  </div>
+
+	</div>
+
+	<button id="myBtn">Adicionar</button><p>
+
+        <table>
+            <caption>Estes são os tesouros acumulados do
+            Barba-Ruiva em suas aventuras</caption>
+            <thead>
+                <tr>
+                    <th>Tesouro</th>
+                    <th>Nome</th>
+                    <th>Valor unitário</th>
+                    <th>Quantidade</th>
+                    <th>Valor total</th> 
+		    <th colspan="2">Editar</th>
+                </tr>
+            </thead>
+	    <tbody>		
+	    
+		<tr>
+		     <td><img src=""/></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td></td>
+		     <td>
+			<form action="" method="post">
+	         		<button id="delete">Remover</button>
+	         	</form>
+		     </td>
+		     <td><button data-nome="" class="update">Modificar</button></td>
+		</tr>
+	    
+	    </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" id="bot">Total</td>
+                    <td id="bot" class="soma"></td>
+		    <td colspan="2" id="bot"></td>
+                </tr>
+            </tfoot>
+        </table>
+        <p>Yarr Harr, marujo! Aqui é o temido
+        Barba-Ruiva e você deve me ajudar a
+        contabilizar os espólios das minhas
+        aventuras!
+        </p>
+	
+	<script>		
+		function initModal(idModal, idBotao){
+			var modal = document.getElementById(idModal);
+			var btn = document.getElementById(idBotao);
+			var span = document.getElementsByClassName("close")[0];
+		
+			span.addEventListener("click", function() {
+			    modal.style.display = "none";
+			});
+			if(idBotao != ""){
+				btn.onclick = function() {
+				    modal.style.display = "block";
+				}
+			}
+		
+			window.addEventListener("click", function(event) {
+			    if (event.target == modal) {
+				modal.style.display = "none";
+			    }
+			});
+
+		}
+	
+		initModal("myModal", "myBtn");
+	
+			document.getElementById("myModal").style.display = "block";	
+		
+		var arrBtnUpdate = document.querySelectorAll(".update");
+		for(var i =0 ; i<arrBtnUpdate.length ; i++){	
+			arrBtnUpdate[i].addEventListener("click", function(e) {
+				    var btnTesouro = e.currentTarget;
+				    window.location.href = ""+btnTesouro.dataset.nome;
+				});
+		}
+	
+	</script>	
+    </body>
+</html>
+
