@@ -155,4 +155,4 @@ urlpatterns = [
 
 ```  
 
-## A pática está no slide e após o fim do minicurso será disponibilizada aqui
+## A prática está no slide e após o fim do minicurso será disponibilizada aqui
