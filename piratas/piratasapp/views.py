@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.forms.utils import ErrorList
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from piratapp.models import Tesouro
+from piratasapp.models import Tesouro
 from django.urls.base import reverse, reverse_lazy
 from django.db.models import F,ExpressionWrapper,DecimalField
 '''

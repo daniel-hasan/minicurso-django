@@ -155,4 +155,11 @@ urlpatterns = [
 
 ```  
 
-## A prática está no slide e após o fim do minicurso será disponibilizada aqui
+### A prática está no slide do repositório
+
+## Para aprender mais
+
+Simple is Better Than Complex - https://simpleisbetterthancomplex.com/ (em inglês)
+Introduction · Django Girls Tutorial - https://tutorial.djangogirls.org/en/ (em inglês)
+Introdução · Django Girls Tutorial - https://tutorial.djangogirls.org/pt/ (em português)
+Documentação do Django | Django documentation | Django - https://docs.djangoproject.com/pt-br/2.0/ (em português)
