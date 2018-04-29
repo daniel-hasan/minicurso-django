@@ -155,11 +155,14 @@ urlpatterns = [
 
 ```  
 
-### A prática está no slide do repositório
+### A prática está um um pdf no repositório
 
 ## Para aprender mais
 
 Simple is Better Than Complex - https://simpleisbetterthancomplex.com/ (em inglês)
+
 Introduction · Django Girls Tutorial - https://tutorial.djangogirls.org/en/ (em inglês)
+
 Introdução · Django Girls Tutorial - https://tutorial.djangogirls.org/pt/ (em português)
+
 Documentação do Django | Django documentation | Django - https://docs.djangoproject.com/pt-br/2.0/ (em português)
